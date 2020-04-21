@@ -1,0 +1,154 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://art/drone.png" type="Texture" id=1]
+[ext_resource path="res://Levels/Player.gd" type="Script" id=2]
+[ext_resource path="res://art/Sky.jpg" type="Texture" id=3]
+[ext_resource path="res://art/fonts/kenney_mini_square.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="Animation" id=1]
+resource_name = "dead"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( -0.1, 0.000739962, 0.101584, 0.201052, 0.315597 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 5, 5, 6, 7, 8 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.396346 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_dead"
+} ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.00044302, 0.1, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 1 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
+
+[sub_resource type="DynamicFont" id=4]
+size = 50
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[node name="Player" type="KinematicBody2D"]
+collision_mask = 33
+script = ExtResource( 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -48.9359, 1.66791, -50.2918, -1.43146, -62.3019, -3.75599, -61.7208, -19.0591, -28.79, -19.0591, -28.4025, -3.9497, -15.8113, -2.2063, -15.8113, -15.3786, 13.0515, -14.2164, 12.8578, -2.98114, 25.0616, -2.98114, 26.2239, -21.7711, 63.8037, -19.4465, 63.0289, -2.98114, 49.0817, -0.0754852, 48.3069, 7.09181, 12.6641, 6.51068, 11.3082, 21.6201, -18.5233, 19.4893, -16.3925, 4.96099, -49.9044, 3.21759 )
+
+[node name="Drone" type="Node2D" parent="."]
+position = Vector2( -1, 0 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Drone"]
+root_node = NodePath("../drone")
+anims/dead = SubResource( 1 )
+anims/drone = SubResource( 2 )
+anims/idle = SubResource( 3 )
+
+[node name="drone" type="Sprite" parent="Drone"]
+texture = ExtResource( 1 )
+vframes = 5
+hframes = 5
+frame = 8
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 0.5 )
+motion_mirroring = Vector2( 1280, 1280 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sky" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource( 3 )
+centered = false
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="GUI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Force" type="Label" parent="GUI"]
+margin_left = -628.71
+margin_top = -382.778
+margin_right = -535.71
+margin_bottom = -253.778
+size_flags_stretch_ratio = 0.0
+custom_fonts/font = SubResource( 4 )
+text = "500
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Life" type="Label" parent="GUI"]
+margin_left = -632.034
+margin_top = -332.237
+margin_right = -523.034
+margin_bottom = -265.237
+size_flags_stretch_ratio = 0.0
+custom_fonts/font = SubResource( 4 )
+text = "100"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+limit_bottom = 1800
+
+[node name="BottomCast" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, 30 )
+collision_mask = 33
